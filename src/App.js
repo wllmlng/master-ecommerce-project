@@ -11,16 +11,26 @@ import {auth, createUserProfileDocument} from './firebase/firebase.utils';
 
 function App() {
 
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState({});
 
 
   let unsubscribeFromAuth = null;
 
   useEffect(() =>{
-    unsubscribeFromAuth = auth.onAuthStateChanged(async user=>{
+    unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth=>{
       // setCurrentUser(user)
-      createUserProfileDocument(user);
-      console.log(user);
+      if(userAuth){
+        const userRef = await createUserProfileDocument(userAuth);
+
+        userRef.onSnapshot(snapShot=>{
+          setCurrentUser({
+            id: snapShot.id,
+            ...snapShot.data()
+          })
+        })
+      }else{
+        setCurrentUser({userAuth})
+      }
     })
 
     return unsubscribeFromAuth;
@@ -29,6 +39,7 @@ function App() {
   
   return (
     <div>
+      {console.log('lookie',currentUser)            }
       <Header currentUser={currentUser}/>
       <Switch>
         <Route exact path='/' component={HomePage} />
