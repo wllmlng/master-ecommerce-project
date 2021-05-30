@@ -23,6 +23,8 @@ const SignUp = () => {
     const handleSubmit = async event => {
         event.preventDefault();
 
+        const {displayName} = state;
+
         if (state.password !== state.confirmPassword) {
             alert("passwords don't match");
             return;
@@ -34,7 +36,7 @@ const SignUp = () => {
                 state.password
             );
 
-            await createUserProfileDocument(user, { displayName });
+            await createUserProfileDocument(user, {displayName} );
 
 
             // setDisplayName("")
@@ -66,7 +68,7 @@ const SignUp = () => {
           <FormInput
             type='text'
             name='displayName'
-            value={displayName}
+            value={state.displayName}
             onChange={handleChange}
             label='Display Name'
             required
@@ -74,7 +76,7 @@ const SignUp = () => {
           <FormInput
             type='email'
             name='email'
-            value={email}
+            value={state.email}
             onChange={handleChange}
             label='Email'
             required
@@ -82,7 +84,7 @@ const SignUp = () => {
           <FormInput
             type='password'
             name='password'
-            value={password}
+            value={state.password}
             onChange={handleChange}
             label='Password'
             required
@@ -90,7 +92,7 @@ const SignUp = () => {
           <FormInput
             type='password'
             name='confirmPassword'
-            value={confirmPassword}
+            value={state.confirmPassword}
             onChange={handleChange}
             label='Confirm Password'
             required
